@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PATLI · Catálogo</title>
+<meta name="description" content="PATLI. Catálogo de flores, extractos y línea de cbd, cuidado personal y mascotas.">
+<meta name="theme-color" content="#130a1f">
+<link rel="icon" type="image/png" href="Logo Patli CBD/Logo Patli CBD.PNG">
+<link rel="stylesheet" href="css/estilos.css?v=20261007c">
+</head>
+<body>
+
+<header class="cabecera">
+  <div class="cabecera__fila">
+    <a class="marca" href="#/home">PATLI</a>
+
+    <div class="buscador">
+      <span class="buscador__lupa" aria-hidden="true">&#9906;</span>
+      <label class="visualmente-oculto" for="buscador">Buscar productos</label>
+      <input
+        id="buscador"
+        class="buscador__campo"
+        type="search"
+        placeholder="Buscar"
+        autocomplete="off"
+        spellcheck="false">
+      <button id="buscador-limpiar" class="buscador__limpiar" type="button" aria-label="Limpiar búsqueda">&times;</button>
+    </div>
+
+    <nav class="nav" aria-label="Secciones del catálogo"></nav>
+  </div>
+</header>
+
+<main class="envoltorio">
+  <div id="secciones"></div>
+</main>
+
+<footer class="pie">
+  <p class="pie__marca">PATLI</p>
+</footer>
+
+<script src="js/datos.js?v=20261008"></script>
+<script src="js/tarjeta.js?v=20261008"></script>
+<script src="js/app.js?v=20261008"></script>
+</body>
+</html>

@@ -1,0 +1,959 @@
+/* ==========================================================================
+   PATLI · HOJA DE ESTILOS
+   Mobile-first. Sistema visual de morado profundo con acentos botánicos
+   verdes. La paleta sigue siendo provisional: se ajusta solo en :root.
+   Clases y arquitectura HTML conservadas de la versión anterior.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Tokens
+   -------------------------------------------------------------------------- */
+:root {
+  /* Morados: del más profundo al más claro */
+  --p-900: #130a1f;
+  --p-850: #180d28;
+  --p-800: #1e1032;
+  --p-700: #2a1745;
+  --p-600: #362059;
+  --p-500: #472a75;
+  --p-400: #6a3fab;
+  --p-300: #8f63c9;
+
+  /* Acentos */
+  --verde: #57b98a;
+  --verde-osc: #2f7d5d;
+  --verde-tenue: rgba(87, 185, 138, 0.14);
+
+  /* Texto */
+  --tinta: #f2ebfb;
+  --tinta-media: #cbb9e2;
+  --tinta-suave: #a893c4;
+  --blanco: #ffffff;
+
+  /* Superficies sobre el morado */
+  --superficie: rgba(255, 255, 255, 0.045);
+  --superficie-alta: rgba(255, 255, 255, 0.08);
+  --linea: rgba(255, 255, 255, 0.11);
+  --linea-fuerte: rgba(255, 255, 255, 0.2);
+
+  /* Métrica */
+  --radio: 18px;
+  --radio-s: 11px;
+  --radio-l: 26px;
+  --sombra: 0 6px 20px rgba(0, 0, 0, 0.34);
+  --sombra-alta: 0 18px 44px rgba(0, 0, 0, 0.48);
+  --ancho-max: 1200px;
+
+  /* Tipografía */
+  --fuente-titulo: Georgia, "Times New Roman", "Songti SC", serif;
+  --fuente-cuerpo: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+
+  /* Movimiento */
+  --cubic-bezier: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* --------------------------------------------------------------------------
+   2. Base
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--fuente-cuerpo);
+  color: var(--tinta);
+  background-color: var(--p-900);
+  /* Atmósfera nocturna. Sin verde: el verde queda solo como acento de texto. */
+  background-image:
+    radial-gradient(1100px 620px at 12% -8%, rgba(111, 66, 173, 0.45), transparent 62%),
+    radial-gradient(1000px 800px at 50% 108%, rgba(74, 42, 122, 0.4), transparent 65%),
+    linear-gradient(178deg, var(--p-850) 0%, var(--p-900) 46%, #0b0612 100%);
+  background-attachment: fixed;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0 0 0.35em;
+  line-height: 1.14;
+  font-weight: 600;
+}
+
+p {
+  margin: 0 0 0.6em;
+}
+
+a {
+  color: var(--verde);
+}
+
+:focus-visible {
+  outline: 2px solid var(--verde);
+  outline-offset: 3px;
+}
+
+/* Todo el contenido por encima de la textura */
+.cabecera,
+.envoltorio,
+.pie {
+  position: relative;
+  z-index: 1;
+}
+
+/* Solo para lectores de pantalla */
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   3. Cabecera, marca y navegación
+   -------------------------------------------------------------------------- */
+.cabecera {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(19, 10, 31, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--linea);
+}
+
+.cabecera__fila {
+  max-width: var(--ancho-max);
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.marca {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  flex: 0 0 auto;
+  font-family: var(--fuente-titulo);
+  font-size: 1.5rem;
+  letter-spacing: 0.22em;
+  color: var(--blanco);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.marca__lupa {
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  color: var(--verde);
+  font-family: var(--fuente-cuerpo);
+  font-weight: 600;
+}
+
+/* Buscador */
+.buscador {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 340px;
+}
+
+.buscador__campo {
+  width: 100%;
+  padding: 0.5rem 0.85rem 0.5rem 2.1rem;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--tinta);
+  background: var(--superficie);
+  border: 1px solid var(--linea);
+  border-radius: 999px;
+  transition: border-color 200ms ease, background 200ms ease;
+}
+
+.buscador__campo::placeholder {
+  color: var(--tinta-suave);
+}
+
+.buscador__campo:focus {
+  background: var(--superficie-alta);
+  border-color: var(--linea-fuerte);
+  outline: none;
+}
+
+.buscador__lupa {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.85rem;
+  color: var(--tinta-suave);
+  pointer-events: none;
+}
+
+.buscador__limpiar {
+  position: absolute;
+  right: 0.45rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.5rem;
+  height: 1.5rem;
+  display: none;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--tinta-media);
+  background: var(--superficie-alta);
+}
+
+.buscador--activo .buscador__limpiar {
+  display: grid;
+}
+
+.nav {
+  display: flex;
+  gap: 0.15rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  order: 3;
+  flex: 1 1 100%;
+}
+
+.nav::-webkit-scrollbar {
+  display: none;
+}
+
+.nav__enlace {
+  flex: 0 0 auto;
+  padding: 0.42rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  text-decoration: none;
+  color: var(--tinta-media);
+  white-space: nowrap;
+  transition: background 200ms ease, color 200ms ease;
+}
+
+.nav__enlace:hover {
+  background: var(--superficie-alta);
+  color: var(--blanco);
+}
+
+.nav__enlace[aria-current="page"] {
+  background: linear-gradient(135deg, var(--p-400), var(--p-500));
+  color: var(--blanco);
+  box-shadow: 0 2px 12px rgba(106, 63, 171, 0.5);
+}
+
+@media (min-width: 860px) {
+  .cabecera__fila {
+    flex-wrap: nowrap;
+  }
+
+  .nav {
+    order: 0;
+    flex: 0 1 auto;
+    justify-content: flex-end;
+  }
+
+  .buscador {
+    order: 0;
+    flex: 0 1 260px;
+    margin-left: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Estructura
+   -------------------------------------------------------------------------- */
+.envoltorio {
+  max-width: var(--ancho-max);
+  margin: 0 auto;
+  padding: 1.75rem 1rem 4rem;
+}
+
+.seccion[hidden] {
+  display: none;
+}
+
+.seccion:focus {
+  outline: none;
+}
+
+.seccion__cabecera {
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--linea);
+  position: relative;
+}
+
+/* Filamento verde bajo el título de cada sección */
+.seccion__cabecera::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 68px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--verde), transparent);
+  border-radius: 2px;
+}
+
+.seccion__titulo {
+  font-family: var(--fuente-titulo);
+  font-size: clamp(1.9rem, 5.5vw, 2.9rem);
+  color: var(--blanco);
+  letter-spacing: 0.01em;
+}
+
+.seccion__resumen {
+  color: var(--tinta-media);
+  font-size: 0.95rem;
+  max-width: 62ch;
+  margin: 0;
+}
+
+/* Contador de piezas de la sección */
+.seccion__conteo {
+  display: inline-block;
+  margin-left: 0.6rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--verde);
+  vertical-align: middle;
+}
+
+/* --------------------------------------------------------------------------
+   5. Portada / Home
+   El fondo botánico tiene protagonismo real: vive en la portada a tamaño
+   completo. El SVG se diseñó con follaje en las cuatro esquinas y bandas
+   superior e inferior, y el centro despejado, así que `cover` funciona en
+   cualquier proporción sin deformar y sin tapar el texto.
+   -------------------------------------------------------------------------- */
+.portada {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: var(--radio-l);
+  padding: clamp(2.2rem, 6vw, 3.6rem) clamp(1.25rem, 5vw, 3rem);
+  margin-bottom: 2.25rem;
+  background-color: #0d0716;
+  border: 1px solid var(--linea);
+  box-shadow: var(--sombra);
+}
+
+/* Capa 1: composición botánica */
+.portada::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background-image: url("../img/fondo-botanico.svg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+/* Capa 2: viñeta suave para sostener el contraste del texto.
+   El centro se oscurece más porque es donde va el titular. */
+.portada::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(78% 58% at 50% 44%, rgba(9, 4, 15, 0.8) 0%, rgba(9, 4, 15, 0.52) 52%, rgba(9, 4, 15, 0.74) 100%);
+}
+
+/* Altura mínima en pantallas estrechas: al agrandar la portada, `cover`
+   recorta más a lo ancho y la ventana visible cae dentro de la franja
+   central limpia del SVG, en vez de dejar foliage bajo el titular. */
+@media (max-width: 999px) {
+  .portada {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+/* Columna de texto del hero.
+   Limitarla mantiene el titular dentro de la franja central limpia del
+   fondo botánico en cualquier ancho, y además controla la longitud de
+   línea. Centrada, no pegada a la izquierda. */
+.portada h1,
+.portada__lema,
+.portada__acciones {
+  max-width: 34rem;
+  width: fit-content;
+  margin-inline: auto;
+}
+
+.portada__acciones {
+  justify-content: center;
+}
+
+.portada__lema {
+  font-family: var(--fuente-titulo);
+  font-style: italic;
+  font-size: clamp(1rem, 2.6vw, 1.3rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #d9b8f7;
+  /* Solo `margin-bottom`: un atajo `margin` pondría a cero el
+     `margin-inline: auto` de la regla de columna y lo desalinearía. */
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
+}
+
+.portada h1 {
+  font-family: var(--fuente-titulo);
+  font-size: clamp(3rem, 13vw, 5.4rem);
+  line-height: 0.95;
+  letter-spacing: 0.16em;
+  color: var(--blanco);
+  text-transform: uppercase;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+  width: fit-content;
+  margin-bottom: 0.5rem;
+}
+
+/* En pantallas anchas la portada ocupa el ancho completo: el fondo
+   botánico necesita espacio para que tenga presencia. */
+@media (min-width: 1000px) {
+  .portada {
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    margin-bottom: 3rem;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+  }
+}
+
+.portada__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 0.4rem;
+}
+
+.boton {
+  display: inline-block;
+  padding: 0.72rem 1.35rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.86rem;
+  letter-spacing: 0.04em;
+  border: 1px solid transparent;
+  transition: transform 200ms ease, box-shadow 200ms ease, background 200ms ease;
+}
+
+.boton--primario {
+  background: var(--blanco);
+  color: var(--p-800);
+}
+
+.boton--linea {
+  background: transparent;
+  color: var(--blanco);
+  border-color: var(--linea-fuerte);
+}
+
+.boton:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sombra-alta);
+}
+
+.boton--verde {
+  background: var(--verde);
+  color: var(--p-900);
+}
+
+/* Bloque de categorías de la portada.
+   Deliberadamente contenido: las categorías son un acceso secundario y
+   no deben competir en tamaño con la identidad PATLI ni con la portada. */
+.categorias {
+  margin-bottom: 2.75rem;
+}
+
+.categorias__titulo,
+.destacados__titulo,
+.resultados__titulo {
+  font-family: var(--fuente-titulo);
+  font-size: clamp(1.05rem, 2.6vw, 1.28rem);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blanco);
+  margin-bottom: 0.7rem;
+}
+
+.categorias__subtitulo,
+.destacados__subtitulo {
+  color: var(--tinta-suave);
+  font-size: 0.82rem;
+  margin: 0 0 1.1rem;
+}
+
+.categorias__rejilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.5rem;
+}
+
+.categoria {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 0;
+  padding: 0.55rem 0.8rem;
+  text-decoration: none;
+  color: var(--tinta);
+  border-radius: var(--radio);
+  border: 1px solid var(--linea);
+  background: linear-gradient(150deg, var(--p-700), var(--p-800));
+  overflow: hidden;
+  transition: transform 240ms var(--cubic-bezier), border-color 240ms ease, box-shadow 240ms ease;
+}
+
+.categoria::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(320px 180px at 100% 0%, rgba(87, 185, 138, 0.18), transparent 62%);
+  opacity: 0;
+  transition: opacity 240ms ease;
+}
+
+.categoria:hover {
+  transform: translateY(-3px);
+  border-color: var(--linea-fuerte);
+  box-shadow: var(--sombra-alta);
+}
+
+.categoria:hover::before {
+  opacity: 1;
+}
+
+.categoria__nombre {
+  position: relative;
+  font-family: var(--fuente-titulo);
+  font-size: 0.95rem;
+  color: var(--blanco);
+  letter-spacing: 0.03em;
+}
+
+.categoria__conteo {
+  position: relative;
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--verde);
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   6. Destacados
+   -------------------------------------------------------------------------- */
+.destacados {
+  margin-bottom: 2rem;
+}
+
+.destacados__carril {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(150px, 1fr);
+  gap: 0.85rem;
+  overflow-x: auto;
+  padding: 0.35rem 0.2rem 1rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.destacados__carril > * {
+  scroll-snap-align: start;
+}
+
+@media (min-width: 760px) {
+  .destacados__carril {
+    grid-auto-columns: minmax(178px, 1fr);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   7. Resultados de búsqueda
+   -------------------------------------------------------------------------- */
+.resultados {
+  margin-bottom: 2rem;
+}
+
+.resultados__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.resultado {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  color: var(--tinta);
+  text-decoration: none;
+  background: var(--superficie);
+  border: 1px solid var(--linea);
+  border-radius: var(--radio-s);
+  transition: background 200ms ease, border-color 200ms ease, transform 200ms ease;
+}
+
+.resultado:hover {
+  background: var(--superficie-alta);
+  border-color: var(--linea-fuerte);
+  transform: translateX(3px);
+}
+
+.resultado__miniatura {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 52px;
+  border-radius: 7px;
+  object-fit: cover;
+  background: var(--p-600);
+}
+
+.resultado__texto {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.resultado__nombre {
+  display: block;
+  font-family: var(--fuente-titulo);
+  font-size: 0.98rem;
+  color: var(--blanco);
+}
+
+.resultado__meta {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--verde);
+}
+
+.resultado__presentacion {
+  flex: 0 0 auto;
+  font-size: 0.72rem;
+  color: var(--tinta-media);
+  text-align: right;
+}
+
+/* --------------------------------------------------------------------------
+   8. Rejilla de tarjetas
+   -------------------------------------------------------------------------- */
+.rejilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.85rem;
+}
+
+@media (min-width: 480px) {
+  .rejilla {
+    grid-template-columns: repeat(auto-fill, minmax(178px, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .rejilla {
+    grid-template-columns: repeat(auto-fill, minmax(205px, 1fr));
+    gap: 1.2rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   9. Tarjeta coleccionable (estática)
+   La tarjeta solo muestra su frente: no voltea, no abre nada y no reacciona
+   al toque. El marco morado es intencionado: borde claro, halo interior y
+   filamento verde. El alto fijo + object-fit hace que fotos verticales
+   (464x832) y horizontales (800x453) se vean uniformes en la misma rejilla.
+   -------------------------------------------------------------------------- */
+.tarjeta {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: var(--radio);
+  background: none;
+  border: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+.tarjeta__interior {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.tarjeta__cara {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radio);
+  overflow: hidden;
+  box-shadow: var(--sombra), inset 0 0 0 1px rgba(255, 255, 255, 0.09);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Frente */
+.tarjeta__cara--frente {
+  background: var(--p-700);
+}
+
+.tarjeta__foto {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Sin oscurecidos sobre la foto: la foto del producto se muestra en su
+   aspecto natural. El contraste del nombre se resuelve con un degradado
+   local en la zona de texto (.tarjeta__pie), no tapando el material. */
+
+/* Marco interior tipo coleccionable */
+.tarjeta__marco {
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: calc(var(--radio) - 6px);
+  pointer-events: none;
+}
+
+/* Marca de agua de la marca */
+.tarjeta__watermark {
+  position: absolute;
+  top: 0.7rem;
+  left: 0.85rem;
+  font-family: var(--fuente-titulo);
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+  z-index: 2;
+}
+
+/* Marcador de categoría (flores / extractos) */
+.tarjeta__categoria {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.7rem;
+  z-index: 2;
+  font-size: 0.55rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--verde);
+  background: rgb(19, 10, 31);
+  border: 1px solid rgba(87, 185, 138, 0.4);
+  border-radius: 999px;
+  padding: 0.14rem 0.45rem;
+}
+
+.tarjeta__sin-foto {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.1rem;
+  text-align: center;
+  background:
+    radial-gradient(240px 180px at 50% 22%, rgba(111, 66, 173, 0.5), transparent 70%),
+    linear-gradient(160deg, var(--p-600), var(--p-800));
+}
+
+/* Monograma: marcador reservado para la fotografía real del producto */
+.tarjeta__monograma {
+  font-family: var(--fuente-titulo);
+  font-size: 1.9rem;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1;
+}
+
+.tarjeta__sin-foto-etq {
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--verde);
+}
+
+.tarjeta__pie {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  padding: 1.7rem 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  color: var(--blanco);
+  /* Degradado local solo sobre la zona de texto: la foto queda íntegra. */
+  background: linear-gradient(
+    to top,
+    rgba(14, 7, 24, 0.94) 0%,
+    rgba(14, 7, 24, 0.72) 46%,
+    rgba(14, 7, 24, 0) 100%
+  );
+}
+
+.tarjeta__nombre {
+  font-family: var(--fuente-titulo);
+  font-size: 1.02rem;
+  line-height: 1.22;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.55);
+}
+
+.tarjeta__sublinea {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--verde);
+  font-weight: 600;
+}
+
+/* Descripción muy breve del frente, solo cuando el dato ya existe */
+.tarjeta__breve {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--tinta-media);
+}
+
+/* Filamento verde bajo el nombre */
+.tarjeta__filamento {
+  width: 34px;
+  height: 2px;
+  margin-top: 0.35rem;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--verde), transparent);
+}
+
+/* --------------------------------------------------------------------------
+   10. Estados auxiliares
+   -------------------------------------------------------------------------- */
+.vacio {
+  padding: 1.8rem 1.1rem;
+  text-align: center;
+  color: var(--tinta-media);
+  background: var(--superficie);
+  border: 1px dashed var(--linea-fuerte);
+  border-radius: var(--radio);
+}
+
+.pie {
+  border-top: 1px solid var(--linea);
+  background: rgba(19, 10, 31, 0.6);
+  padding: 1.9rem 1rem 2.4rem;
+  text-align: center;
+  font-size: 0.76rem;
+  color: var(--tinta-suave);
+}
+
+.pie__marca {
+  font-family: var(--fuente-titulo);
+  font-size: 1.05rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--tinta-media);
+  margin-bottom: 0.5rem;
+}
+
+.pie p {
+  margin: 0.2rem 0;
+}
+
+.pie__enlace {
+  color: var(--verde);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(87, 185, 138, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   11. Movimiento reducido
+   Las tarjetas son estáticas; aquí solo se suprimen las animaciones
+   decorativas del resto de la interfaz.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .boton:hover,
+  .categoria:hover,
+  .resultado:hover {
+    transform: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   12. Impresión
+   -------------------------------------------------------------------------- */
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .cabecera,
+  .pie,
+  .buscador,
+  .categorias,
+  .destacados {
+    display: none;
+  }
+}
